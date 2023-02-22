@@ -17,7 +17,7 @@ filename='energydata_complete.csv'
 #datos=np.genfromtxt(filename,delimiter=';',skip_header=1)
 
 #alternativamente, se pueden leer columnas específicas entre el rango [X,Y] de esta forma:
-datos=np.genfromtxt(filename,delimiter=';',skip_header=1, usecols = (0, 12))
+datos=np.genfromtxt(filename,delimiter=';',skip_header=1, usecols = (0, 12), dtype=None)
 
 print("Done")
 
