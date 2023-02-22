@@ -19,6 +19,21 @@ filename='energydata_complete.csv'
 #alternativamente, se pueden leer columnas específicas entre el rango [X,Y] de esta forma:
 datos=np.genfromtxt(filename,delimiter=';',skip_header=1, usecols = (0, 12), dtype=None)
 
-print("Done")
+def calculateAverage(datos):
+    sum = 0
 
-# Su código va aquí...
+    for line in datos:
+        sum += line[1]
+
+    result = sum/len(datos)
+
+    print("Datos has an average of " + str(result))
+
+    return result
+
+def calculateStatistics(datos):
+    
+    #Calcular promedio
+    calculateAverage(datos)
+
+calculateStatistics(datos)
