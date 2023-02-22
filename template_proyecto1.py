@@ -57,7 +57,7 @@ def calculateQuartilesNumpy(dataArray):
     Q3 = np.quantile(dataArray, q = 0.75)
 
     print("Datos has a Q1 of " + str(Q1))
-    print("Datos has a Q3 of " + str(Q1))
+    print("Datos has a Q3 of " + str(Q3))
 
     return (Q1, Q3)
 
@@ -69,7 +69,7 @@ def calculateQuartilesManually(dataArray):
     Q3 = dataArray[mt.ceil(0.75*n)]
 
     print("Datos has a Q1 of " + str(Q1))
-    print("Datos has a Q3 of " + str(Q1))
+    print("Datos has a Q3 of " + str(Q3))
 
     return (Q1, Q3)
 
