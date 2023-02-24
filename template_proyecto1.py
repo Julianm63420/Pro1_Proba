@@ -75,17 +75,17 @@ def calculateSampleRange(dataArraySorted):
 def calculateQuantileRange(Q1, Q3):
     return Q3 - Q1
 
-def printValues(average, median, quantiles, variance, standardDeviation, varianceCoeficient, sampleRange, quantileRange):
+def printValues(valuesObtained):
     print("Datos has the following values\n"
-          + "Average: " + str(average) + "\n"
-          + "Median: " + str(median) + "\n"
-          + "Q1: " + str(quantiles[0]) + "\n"
-          + "Q3: " + str(quantiles[1]) + "\n"
-          + "Variance: " + str(variance) + "\n"
-          + "Standard Deviation: " + str(standardDeviation) + "\n"
-          + "Variance Coeficient: " + str(average) + "\n"
-          + "Sample Range: " + str(sampleRange) + "\n"
-          + "Quantile Range: " + str(quantileRange) + "\n")
+          + "Average: " + str(valuesObtained['average']) + "\n"
+          + "Median: " + str(valuesObtained['median']) + "\n"
+          + "Q1: " + str(valuesObtained['quantiles'][0]) + "\n"
+          + "Q3: " + str(valuesObtained['quantiles'][1]) + "\n"
+          + "Variance: " + str(valuesObtained['variance']) + "\n"
+          + "Standard Deviation: " + str(valuesObtained['standardDeviation']) + "\n"
+          + "Variance Coeficient: " + str(valuesObtained['varianceCoeficient']) + "\n"
+          + "Sample Range: " + str(valuesObtained['sampleRange']) + "\n"
+          + "Quantile Range: " + str(valuesObtained['quantileRange']) + "\n")
 
     
 
@@ -94,6 +94,8 @@ def calculateStatistics(datos, printResults):
     dateArray = []
     dataArray = []
 
+    valuesObtained = dict()
+
     for line in datos:
         dateArray.insert(0, line[0])
         dataArray.insert(0, line[1])
@@ -101,31 +103,33 @@ def calculateStatistics(datos, printResults):
     dataArraySorted = np.sort(dataArray)
     
     #Calcular promedio
-    average = calculateAverage(dataArray)
+    valuesObtained['average'] = calculateAverage(dataArray)
 
     #Calcular mediana
-    median = calculateMedian(dataArraySorted)
+    valuesObtained['median'] = calculateMedian(dataArraySorted)
 
     #Calcular Quartiles
-    quantiles = calculateQuartiles(dataArraySorted, "manual")
+    valuesObtained['quantiles'] = calculateQuartiles(dataArraySorted, "manual")
 
     #Calcular varianza muestral
-    variance = calculateVariance(dataArraySorted)
+    valuesObtained['variance'] = calculateVariance(dataArraySorted)
 
     #Calcular desviación estándar
-    standardDeviation = calculateStandardDeviation(variance)
+    valuesObtained['standardDeviation'] = calculateStandardDeviation(valuesObtained['variance'])
 
     #Calcular coeficiente de variación
-    coeficient = calculateVarianceCoeficient(standardDeviation, average)
+    valuesObtained['varianceCoeficient'] = calculateVarianceCoeficient(valuesObtained['standardDeviation'], valuesObtained['average'])
 
     #Calcular rango muestral
-    sampleRange = calculateSampleRange(dataArraySorted)
+    valuesObtained['sampleRange'] = calculateSampleRange(dataArraySorted)
 
     #Calcular rango interquartil
-    quantileRange = calculateQuantileRange(quantiles[0], quantiles[1])
+    valuesObtained['quantileRange'] = calculateQuantileRange(valuesObtained['quantiles'][0], valuesObtained['quantiles'][1])
 
     if printResults:
-        printValues(average, median, quantiles, variance, standardDeviation, coeficient, sampleRange, quantileRange)
+        printValues(valuesObtained)
+
+    return valuesObtained
 
 
     
