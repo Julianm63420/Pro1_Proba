@@ -11,14 +11,18 @@ Template con lectura de datos en archivo csv
 import numpy as np
 import math as mt
 
-#input_dir='C:/Users/PATH/' #PATH al archivo de datos, cambiar según cada computadora. Sirve para evitar 'File not found'
-filename='energydata_complete.csv'
+def loadData():
+    #input_dir='C:/Users/PATH/' #PATH al archivo de datos, cambiar según cada computadora. Sirve para evitar 'File not found'
+    filename='energydata_complete.csv'
 
-# Esta línea lee la matriz de datos (sin titulos) para números solamente. Otro tipo de variable (texto por ejemplo) se leerá como nan
-#datos=np.genfromtxt(filename,delimiter=';',skip_header=1)
+    # Esta línea lee la matriz de datos (sin titulos) para números solamente. Otro tipo de variable (texto por ejemplo) se leerá como nan
+    #datos=np.genfromtxt(filename,delimiter=';',skip_header=1)
 
-#alternativamente, se pueden leer columnas específicas entre el rango [X,Y] de esta forma:
-datos=np.genfromtxt(filename,delimiter=';',skip_header=1, usecols = (0, 12), dtype=None, encoding=None)
+    #alternativamente, se pueden leer columnas específicas entre el rango [X,Y] de esta forma:
+    datos=np.genfromtxt(filename,delimiter=';',skip_header=1, usecols = (0, 12), dtype=None, encoding=None)
+
+    return datos
+
 
 def calculateAverage(dataArray):
 
@@ -75,24 +79,28 @@ def calculateSampleRange(dataArraySorted):
 def calculateQuantileRange(Q1, Q3):
     return Q3 - Q1
 
-def printValues(average, median, quantiles, variance, standardDeviation, varianceCoeficient, sampleRange, quantileRange):
+def printValues(valuesObtained):
     print("Datos has the following values\n"
-          + "Average: " + str(average) + "\n"
-          + "Median: " + str(median) + "\n"
-          + "Q1: " + str(quantiles[0]) + "\n"
-          + "Q3: " + str(quantiles[1]) + "\n"
-          + "Variance: " + str(variance) + "\n"
-          + "Standard Deviation: " + str(standardDeviation) + "\n"
-          + "Variance Coeficient: " + str(average) + "\n"
-          + "Sample Range: " + str(sampleRange) + "\n"
-          + "Quantile Range: " + str(quantileRange) + "\n")
+          + "Average: " + str(valuesObtained['average']) + "\n"
+          + "Median: " + str(valuesObtained['median']) + "\n"
+          + "Q1: " + str(valuesObtained['quantiles'][0]) + "\n"
+          + "Q3: " + str(valuesObtained['quantiles'][1]) + "\n"
+          + "Variance: " + str(valuesObtained['variance']) + "\n"
+          + "Standard Deviation: " + str(valuesObtained['standardDeviation']) + "\n"
+          + "Variance Coeficient: " + str(valuesObtained['varianceCoeficient']) + "\n"
+          + "Sample Range: " + str(valuesObtained['sampleRange']) + "\n"
+          + "Quantile Range: " + str(valuesObtained['quantileRange']) + "\n")
 
     
 
-def calculateStatistics(datos, printResults):
+def calculateStatistics(printResults):
 
+    datos = loadData()
+    
     dateArray = []
     dataArray = []
+
+    valuesObtained = dict()
 
     for line in datos:
         dateArray.insert(0, line[0])
@@ -101,33 +109,37 @@ def calculateStatistics(datos, printResults):
     dataArraySorted = np.sort(dataArray)
     
     #Calcular promedio
-    average = calculateAverage(dataArray)
+    valuesObtained['average'] = calculateAverage(dataArray)
 
     #Calcular mediana
-    median = calculateMedian(dataArraySorted)
+    valuesObtained['median'] = calculateMedian(dataArraySorted)
 
     #Calcular Quartiles
-    quantiles = calculateQuartiles(dataArraySorted, "manual")
+    valuesObtained['quantiles'] = calculateQuartiles(dataArraySorted, "manual")
 
     #Calcular varianza muestral
-    variance = calculateVariance(dataArraySorted)
+    valuesObtained['variance'] = calculateVariance(dataArraySorted)
 
     #Calcular desviación estándar
-    standardDeviation = calculateStandardDeviation(variance)
+    valuesObtained['standardDeviation'] = calculateStandardDeviation(valuesObtained['variance'])
 
     #Calcular coeficiente de variación
-    coeficient = calculateVarianceCoeficient(standardDeviation, average)
+    valuesObtained['varianceCoeficient'] = calculateVarianceCoeficient(valuesObtained['standardDeviation'],
+                                                                        valuesObtained['average'])
 
     #Calcular rango muestral
-    sampleRange = calculateSampleRange(dataArraySorted)
+    valuesObtained['sampleRange'] = calculateSampleRange(dataArraySorted)
 
     #Calcular rango interquartil
-    quantileRange = calculateQuantileRange(quantiles[0], quantiles[1])
+    valuesObtained['quantileRange'] = calculateQuantileRange(valuesObtained['quantiles'][0],
+                                                              valuesObtained['quantiles'][1])
 
     if printResults:
-        printValues(average, median, quantiles, variance, standardDeviation, coeficient, sampleRange, quantileRange)
+        printValues(valuesObtained)
+
+    return valuesObtained
 
 
     
 
-calculateStatistics(datos, True)
+calculateStatistics(True)
