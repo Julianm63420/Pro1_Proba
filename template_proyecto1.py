@@ -11,14 +11,18 @@ Template con lectura de datos en archivo csv
 import numpy as np
 import math as mt
 
-#input_dir='C:/Users/PATH/' #PATH al archivo de datos, cambiar según cada computadora. Sirve para evitar 'File not found'
-filename='energydata_complete.csv'
+def loadData():
+    #input_dir='C:/Users/PATH/' #PATH al archivo de datos, cambiar según cada computadora. Sirve para evitar 'File not found'
+    filename='energydata_complete.csv'
 
-# Esta línea lee la matriz de datos (sin titulos) para números solamente. Otro tipo de variable (texto por ejemplo) se leerá como nan
-#datos=np.genfromtxt(filename,delimiter=';',skip_header=1)
+    # Esta línea lee la matriz de datos (sin titulos) para números solamente. Otro tipo de variable (texto por ejemplo) se leerá como nan
+    #datos=np.genfromtxt(filename,delimiter=';',skip_header=1)
 
-#alternativamente, se pueden leer columnas específicas entre el rango [X,Y] de esta forma:
-datos=np.genfromtxt(filename,delimiter=';',skip_header=1, usecols = (0, 12), dtype=None, encoding=None)
+    #alternativamente, se pueden leer columnas específicas entre el rango [X,Y] de esta forma:
+    datos=np.genfromtxt(filename,delimiter=';',skip_header=1, usecols = (0, 12), dtype=None, encoding=None)
+
+    return datos
+
 
 def calculateAverage(dataArray):
 
@@ -89,8 +93,10 @@ def printValues(valuesObtained):
 
     
 
-def calculateStatistics(datos, printResults):
+def calculateStatistics(printResults):
 
+    datos = loadData()
+    
     dateArray = []
     dataArray = []
 
@@ -118,13 +124,15 @@ def calculateStatistics(datos, printResults):
     valuesObtained['standardDeviation'] = calculateStandardDeviation(valuesObtained['variance'])
 
     #Calcular coeficiente de variación
-    valuesObtained['varianceCoeficient'] = calculateVarianceCoeficient(valuesObtained['standardDeviation'], valuesObtained['average'])
+    valuesObtained['varianceCoeficient'] = calculateVarianceCoeficient(valuesObtained['standardDeviation'],
+                                                                        valuesObtained['average'])
 
     #Calcular rango muestral
     valuesObtained['sampleRange'] = calculateSampleRange(dataArraySorted)
 
     #Calcular rango interquartil
-    valuesObtained['quantileRange'] = calculateQuantileRange(valuesObtained['quantiles'][0], valuesObtained['quantiles'][1])
+    valuesObtained['quantileRange'] = calculateQuantileRange(valuesObtained['quantiles'][0],
+                                                              valuesObtained['quantiles'][1])
 
     if printResults:
         printValues(valuesObtained)
@@ -134,4 +142,4 @@ def calculateStatistics(datos, printResults):
 
     
 
-calculateStatistics(datos, True)
+calculateStatistics(True)
