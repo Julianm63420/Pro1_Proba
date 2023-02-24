@@ -18,23 +18,15 @@ filename='energydata_complete.csv'
 #datos=np.genfromtxt(filename,delimiter=';',skip_header=1)
 
 #alternativamente, se pueden leer columnas específicas entre el rango [X,Y] de esta forma:
-datos=np.genfromtxt(filename,delimiter=';',skip_header=1, usecols = (0, 12), dtype=None)
+datos=np.genfromtxt(filename,delimiter=';',skip_header=1, usecols = (0, 12), dtype=None, encoding=None)
 
 def calculateAverage(dataArray):
 
-    result = np.average(dataArray)
-
-    print("Datos has an average of " + str(result))
-
-    return result
+    return np.average(dataArray)
 
 def calculateMedian(dataArray):
 
-    result = np.median(dataArray)
-
-    print("Datos has a median of " + str(result))
-
-    return result
+    return np.median(dataArray)
 
 def calculateQuartiles(dataArray, method):
 
@@ -56,9 +48,6 @@ def calculateQuartilesNumpy(dataArray):
     Q1 = np.quantile(dataArray, q = 0.25)
     Q3 = np.quantile(dataArray, q = 0.75)
 
-    print("Datos has a Q1 of " + str(Q1))
-    print("Datos has a Q3 of " + str(Q3))
-
     return (Q1, Q3)
 
 def calculateQuartilesManually(dataArray):
@@ -68,20 +57,39 @@ def calculateQuartilesManually(dataArray):
     Q1 = dataArray[mt.ceil(0.25*n)]
     Q3 = dataArray[mt.ceil(0.75*n)]
 
-    print("Datos has a Q1 of " + str(Q1))
-    print("Datos has a Q3 of " + str(Q3))
-
     return (Q1, Q3)
 
 def calculateVariance(dataArray):
 
-    variance = np.var(dataArray)
-    print("Datos has a variance of " + str(variance))
+    return np.var(dataArray)
 
-    return variance
+def calculateStandardDeviation(variance):
+    return np.sqrt(variance)
+
+def calculateVarianceCoeficient(standardDeviation, average):
+    return (standardDeviation/average)*100
+
+def calculateSampleRange(dataArraySorted):
+    return np.max(dataArraySorted) - np.min(dataArraySorted)
+
+def calculateQuantileRange(Q1, Q3):
+    return Q3 - Q1
+
+def printValues(average, median, quantiles, variance, standardDeviation, varianceCoeficient, sampleRange, quantileRange):
+    print("Datos has the following values\n"
+          + "Average: " + str(average) + "\n"
+          + "Median: " + str(median) + "\n"
+          + "Q1: " + str(quantiles[0]) + "\n"
+          + "Q3: " + str(quantiles[1]) + "\n"
+          + "Variance: " + str(variance) + "\n"
+          + "Standard Deviation: " + str(standardDeviation) + "\n"
+          + "Variance Coeficient: " + str(average) + "\n"
+          + "Sample Range: " + str(sampleRange) + "\n"
+          + "Quantile Range: " + str(quantileRange) + "\n")
+
     
 
-def calculateStatistics(datos):
+def calculateStatistics(datos, printResults):
 
     dateArray = []
     dataArray = []
@@ -99,27 +107,27 @@ def calculateStatistics(datos):
     median = calculateMedian(dataArraySorted)
 
     #Calcular Quartiles
-    quartiles = calculateQuartiles(dataArraySorted, "manual")
+    quantiles = calculateQuartiles(dataArraySorted, "manual")
 
     #Calcular varianza muestral
     variance = calculateVariance(dataArraySorted)
 
     #Calcular desviación estándar
-    standardDeviation = np.sqrt(variance)
+    standardDeviation = calculateStandardDeviation(variance)
 
     #Calcular coeficiente de variación
-    coeficient = (standardDeviation/average)*100
-    print("Datos has a coeficient of variance of " + str(coeficient))
+    coeficient = calculateVarianceCoeficient(standardDeviation, average)
 
     #Calcular rango muestral
-    sampleRange = np.max(dataArraySorted) - np.min(dataArraySorted)
-    print("Datos has a sample range of " + str(sampleRange))
+    sampleRange = calculateSampleRange(dataArraySorted)
 
     #Calcular rango interquartil
-    quantileRange = quartiles[1] - quartiles[0]
-    print("Datos has a quantile range of " + str(quantileRange))
+    quantileRange = calculateQuantileRange(quantiles[0], quantiles[1])
+
+    if printResults:
+        printValues(average, median, quantiles, variance, standardDeviation, coeficient, sampleRange, quantileRange)
 
 
     
 
-calculateStatistics(datos)
+calculateStatistics(datos, True)
