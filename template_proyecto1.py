@@ -24,14 +24,32 @@ def loadData():
     return datos
 
 
+#Calculates the average of the data along an specific axis
+#using numpy.average with just sums the values and divides them
+#by the amount of values
+#Parameters:
+# - dataArray: raw data from csv
+#Return: Average of data
 def calculateAverage(dataArray):
 
     return np.average(dataArray)
 
+#Calculates the median of the data using numpy.median
+#which computes the median finding the X((n-1)/2), if
+#n happened to be odd, it uses the average of the 2 middle
+#values
+#Parameters:
+# - dataArray: sorted data from csv in ascending order
+#Return: Median of data
 def calculateMedian(dataArray):
 
     return np.median(dataArray)
 
+#Auxiliare function for calling functions that calculate quantiles
+#Parameters:
+# - dataArray: sorted values from csv in ascending order
+# - method: which of the methods know to use
+#Return: list of quantiles
 def calculateQuartiles(dataArray, method):
 
     method = method.lower()
@@ -47,6 +65,14 @@ def calculateQuartiles(dataArray, method):
         case _:
             return (None, None)
 
+#Calculates quantiles using numpy.quantile whcih uses a linear method
+#meaning it calculates the quantile using the following equation
+# i + g = q*(n - alpha - beta + 1) + alpha
+#where i is the floor and g the fractional part of the index q
+#the default is the linear method which uses alpha = beta = 1
+#Parameters:
+# - dataArray: Sorted data array
+#Return: Q1 and Q3
 def calculateQuartilesNumpy(dataArray):
 
     Q1 = np.quantile(dataArray, q = 0.25)
@@ -54,6 +80,11 @@ def calculateQuartilesNumpy(dataArray):
 
     return (Q1, Q3)
 
+#Calculates quantiles using the ceiling of the 0.25*n th index and
+#0.75*n th
+#Parameters:
+# - dataArray: Sorted data array
+#Return: Q1 and Q3
 def calculateQuartilesManually(dataArray):
 
     n = len(dataArray)
@@ -63,19 +94,43 @@ def calculateQuartilesManually(dataArray):
 
     return (Q1, Q3)
 
+#Calculates the variance of the data using numpy.var
+#using x's mean and 
 def calculateVariance(dataArray):
 
     return np.var(dataArray)
 
+#Calculates the standard deviation using the square root
+#of the variance
+#Parameters:
+# - variance: N/A
+#Return: square root of variance
 def calculateStandardDeviation(variance):
     return np.sqrt(variance)
 
+#Calculates the variance coefficient using
+#standard deviation and average by dividing them in said respective order
+#and multiplying it by 100
+#Parameters:
+# - standard deviation: N/A
+# - average: N/A
+#Return: result of substraction
 def calculateVarianceCoeficient(standardDeviation, average):
     return (standardDeviation/average)*100
 
+#Calculates the sample range substracting the max value in the data
+#from the min value
+#Parameters:
+# - dataArraySorted: Sorted values in ascending order
+#Return: result of substraction
 def calculateSampleRange(dataArraySorted):
     return np.max(dataArraySorted) - np.min(dataArraySorted)
 
+#Calculates the quantile range by substracting Q1 from Q3
+#Parameters:
+# - Q1: quantile 1
+# - Q3: quantile 3
+#Return: result of substraction
 def calculateQuantileRange(Q1, Q3):
     return Q3 - Q1
 
@@ -93,6 +148,14 @@ def printValues(valuesObtained):
 
     
 
+
+#This function generates the statistics for a sample of data
+#Parameters:
+# - printResults: bool indicating whether to print results to terminal
+#Return: Returns a dictionary of the statistics for the sample data
+#possible values for the dictionary are:
+# average, median, quantiles (list of 2 values), variance, standardDeviation,
+# varianceCoefficient, sampleRange, quantileRange 
 def calculateStatistics(printResults):
 
     datos = loadData()
