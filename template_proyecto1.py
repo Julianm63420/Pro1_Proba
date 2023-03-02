@@ -10,6 +10,8 @@ Template con lectura de datos en archivo csv
 
 import numpy as np
 import math as mt
+import matplotlib.pyplot as plt
+from matplotlib import style 
 
 def loadData():
     #input_dir='C:/Users/PATH/' #PATH al archivo de datos, cambiar según cada computadora. Sirve para evitar 'File not found'
@@ -201,6 +203,11 @@ def calculateStatistics(printResults):
         printValues(valuesObtained)
 
     return valuesObtained
+
+
+def histogram(dataArray): 
+    histo=(style.use('bmh'),plt.hist(dataArray,bins=100, edgecolor="black", rwidth=0.9),plt.xlabel("Porcentaje de Humedad"),plt.ylabel("Frecuencia de mediciones"),plt.title("Humedad presente en el baño"))
+    plt.show()
 
 
     
