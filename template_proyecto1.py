@@ -148,6 +148,9 @@ def printValues(valuesObtained):
           + "Sample Range: " + str(valuesObtained['sampleRange']) + "\n"
           + "Quantile Range: " + str(valuesObtained['quantileRange']) + "\n")
     
+ #Builds the histogram using humidity data found in dataArray
+ #The number of clases or bars are calculated by numOfClases
+ #By calculating the square root of the total number of data
 def histogram(dataArray, sampleRange):
 
     numOfClases = (mt.ceil(np.sqrt(len(dataArray))))
@@ -165,6 +168,10 @@ def histogram(dataArray, sampleRange):
 
     plt.figure(figsize=(20,10))
     
+    #Builds a box plot using humidity data 
+    #We used this function to found outlier data
+    #Sort the values in ascending order
+    #Calculates Q1,Q2,Q3 and the limits of the boxplot the same way we calculate this values in class
     plt.boxplot(dataArray)
 
     style.use('bmh')
