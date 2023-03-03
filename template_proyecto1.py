@@ -152,10 +152,8 @@ def histogram(dataArray, sampleRange):
 
     numOfClases = (mt.ceil(np.sqrt(len(dataArray))))
 
-    interval = (sampleRange*(1+0.05))/numOfClases
-
-    initialValue = dataArray.min()*0.99
-
+    plt.figure(figsize=(20,10))
+    
     counts, bins, patches = plt.hist(dataArray,bins=numOfClases, edgecolor="black", rwidth=0.9)
 
     style.use('bmh')
@@ -163,6 +161,13 @@ def histogram(dataArray, sampleRange):
     plt.ylabel("Frecuencia de mediciones")
     plt.title("Humedad presente en el baño")
     plt.xticks(ticks=bins)
+    plt.show(block=False)
+
+    plt.figure(figsize=(20,10))
+    
+    plt.boxplot(dataArray)
+
+    style.use('bmh')
     plt.show()
 
 #This function generates the statistics for a sample of data
