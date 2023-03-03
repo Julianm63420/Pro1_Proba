@@ -147,9 +147,23 @@ def printValues(valuesObtained):
           + "Variance Coeficient: " + str(valuesObtained['varianceCoeficient']) + "\n"
           + "Sample Range: " + str(valuesObtained['sampleRange']) + "\n"
           + "Quantile Range: " + str(valuesObtained['quantileRange']) + "\n")
-
     
+def histogram(dataArray, sampleRange):
 
+    numOfClases = (mt.ceil(np.sqrt(len(dataArray))))
+
+    interval = (sampleRange*(1+0.05))/numOfClases
+
+    initialValue = dataArray.min()*0.99
+
+    counts, bins, patches = plt.hist(dataArray,bins=numOfClases, edgecolor="black", rwidth=0.9)
+
+    style.use('bmh')
+    plt.xlabel("Porcentaje de Humedad")
+    plt.ylabel("Frecuencia de mediciones")
+    plt.title("Humedad presente en el baño")
+    plt.xticks(ticks=bins)
+    plt.show()
 
 #This function generates the statistics for a sample of data
 #Parameters:
@@ -202,12 +216,10 @@ def calculateStatistics(printResults):
     if printResults:
         printValues(valuesObtained)
 
+    #Realizar histograma
+    histogram(dataArraySorted, valuesObtained['sampleRange'])
+
     return valuesObtained
-
-
-def histogram(dataArray): 
-    histo=(style.use('bmh'),plt.hist(dataArray,bins=100, edgecolor="black", rwidth=0.9),plt.xlabel("Porcentaje de Humedad"),plt.ylabel("Frecuencia de mediciones"),plt.title("Humedad presente en el baño"))
-    plt.show()
 
 
     
